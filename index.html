@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Quiz System</title>
+    <script src="library/jquery-3.6.0.min.js"></script>
+    <script src="library/crypto-js.min.js"></script>
+    <script src="logic.js"></script>
+    <style>
+        /* Basic styling for the quiz */
+        .hidden { display: none; }
+        .container { max-width: 600px; margin: auto; }
+        .question { font-weight: bold; }
+        .options { list-style-type: none; padding: 0; }
+        .options li { margin: 10px 0; }
+        .question, .options li {font-size: 1.2rem;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Web Quiz System</h1>
+        <div id="login-form">
+            <h2>Login</h2>
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+            <button id="login-btn">Login</button>
+            <p>Don't have an account? <a href="#" id="show-register">Register here</a></p>
+            <p>Forgot your password? <a href="#" id="show-recover">Recover here</a></p>
+        </div>
+        <div id="register-form" class="hidden">
+            <h2>Register</h2>
+            <input type="text" id="register-username" placeholder="Username">
+            <input type="password" id="register-password" placeholder="Password">
+            <label for="register-security-question">Security Question:</label>
+            <select id="register-security-question"></select>
+            <input type="text" id="register-security-answer" placeholder="Security Answer">
+            <button id="register-btn">Register</button>
+            <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+        </div>
+        <div id="recover-form" class="hidden">
+            <h2>Recover Password</h2>
+            <input type="text" id="recover-username" placeholder="Username">
+            <div id="recover-security-question-container" class="hidden">
+                <label id="recover-security-question"></label>
+            </div>
+            <input type="text" id="recover-security-answer" placeholder="Security Answer">
+            <input type="password" id="recover-new-password" placeholder="New Password">
+            <button id="recover-password-btn">Recover Password</button>
+            <p>Remembered your password? <a href="#" id="show-login-on-recover">Login here</a></p>
+        </div>
+        <div id="main-content" class="hidden">
+            <p id="welcome-msg"></p>
+            <button id="logout-btn">Logout</button>
+            <div id="department-selection">
+                <h2>Select Category, Level, Subject, and Year/Form</h2>
+                <select id="main-category">
+                    <option value="">Select Category</option>
+                </select>
+                <select id="level" disabled>
+                    <option value="">Select Level</option>
+                </select>
+                <select id="subject" disabled>
+                    <option value="">Select Subject</option>
+                </select>
+                <select id="year-or-form" disabled>
+                    <option value="">Select Year/Form</option>
+                </select>
+                <button id="select-department">Next</button>
+            </div>
+            <div id="question-selection" class="hidden">
+                <h2>Select Number of Questions</h2>
+                <input type="number" id="num-questions" min="1" max="10">
+                <button id="start-quiz">Start Quiz</button>
+            </div>
+            <div id="quiz-container" class="hidden">
+                <div id="question-container">
+                    <div class="question"></div>
+                    <ul class="options"></ul>
+                    <div id="timer"></div>
+                    <button id="submit-answer">Submit</button>
+                    <div id="feedback"></div>
+                </div>
+            </div>
+            <div id="score-container" class="hidden">
+                <h2>Your Score</h2>
+                <div id="score"></div>
+                <h3>Score History</h3>
+                <div>
+                    <label for="sort-criteria">Sort by:</label>
+                    <select id="sort-criteria">
+                        <option value="Date">Date</option>
+                        <option value="Score">Score</option>
+                    </select>
+                    <label for="filter-department">Filter by Department:</label>
+                    <select id="filter-department">
+                        <option value="All">All</option>
+                        <!-- Add more departments here -->
+                    </select>
+                </div>
+                <ul id="score-history"></ul>
+                <div id="pagination"></div>
+                <div id="past-quiz-container" class="hidden"></div>
+                <button id="retake-quiz">Take Another Quiz</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

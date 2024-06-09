@@ -1,0 +1,52 @@
+[
+    {
+        "question": "What is the chemical formula for water?",
+        "options": ["H2O", "CO2", "O2", "H2"],
+        "answer": "H2O"
+    },
+    {
+        "question": "What is the process by which plants make their food?",
+        "options": ["Photosynthesis", "Respiration", "Digestion", "Fermentation"],
+        "answer": "Photosynthesis"
+    },
+    {
+        "question": "Which planet is known as the Red Planet?",
+        "options": ["Earth", "Venus", "Mars", "Jupiter"],
+        "answer": "Mars"
+    },
+    {
+        "question": "What is the force that pulls objects toward the center of the Earth?",
+        "options": ["Magnetism", "Electricity", "Gravity", "Friction"],
+        "answer": "Gravity"
+    },
+    {
+        "question": "Which gas is most abundant in the Earth's atmosphere?",
+        "options": ["Oxygen", "Hydrogen", "Carbon Dioxide", "Nitrogen"],
+        "answer": "Nitrogen"
+    },
+    {
+        "question": "What is the main source of energy for the Earth?",
+        "options": ["The Moon", "The Sun", "Volcanoes", "Wind"],
+        "answer": "The Sun"
+    },
+    {
+        "question": "What is the smallest unit of life?",
+        "options": ["Tissue", "Organ", "Cell", "Organism"],
+        "answer": "Cell"
+    },
+    {
+        "question": "Which organ is primarily responsible for pumping blood throughout the body?",
+        "options": ["Liver", "Brain", "Heart", "Kidney"],
+        "answer": "Heart"
+    },
+    {
+        "question": "What is the chemical symbol for gold?",
+        "options": ["Ag", "Au", "Fe", "Pb"],
+        "answer": "Au"
+    },
+    {
+        "question": "What type of energy is stored in food?",
+        "options": ["Thermal Energy", "Chemical Energy", "Kinetic Energy", "Nuclear Energy"],
+        "answer": "Chemical Energy"
+    }
+]

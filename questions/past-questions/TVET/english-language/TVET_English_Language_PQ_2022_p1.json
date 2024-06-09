@@ -1,0 +1,52 @@
+[
+    {
+        "question": "What is the antonym of hot?",
+        "options": ["Warm", "Cool", "Cold", "Boiling"],
+        "answer": "Cold"
+    },
+    {
+        "question": "Which word means the same as quick?",
+        "options": ["Slow", "Fast", "Late", "Lazy"],
+        "answer": "Fast"
+    },
+    {
+        "question": "What is the synonym of large?",
+        "options": ["Tiny", "Huge", "Small", "Little"],
+        "answer": "Huge"
+    },
+    {
+        "question": "Which of these words is an antonym of early?",
+        "options": ["Late", "Prompt", "Punctual", "Soon"],
+        "answer": "Late"
+    },
+    {
+        "question": "What is the synonym of begin?",
+        "options": ["End", "Start", "Finish", "Close"],
+        "answer": "Start"
+    },
+    {
+        "question": "Which word means the same as quiet?",
+        "options": ["Noisy", "Silent", "Loud", "Boisterous"],
+        "answer": "Silent"
+    },
+    {
+        "question": "What is the antonym of strong?",
+        "options": ["Weak", "Powerful", "Sturdy", "Tough"],
+        "answer": "Weak"
+    },
+    {
+        "question": "Which of these words is a synonym of beautiful?",
+        "options": ["Ugly", "Pretty", "Unattractive", "Plain"],
+        "answer": "Pretty"
+    },
+    {
+        "question": "What is the antonym of happy?",
+        "options": ["Joyful", "Sad", "Cheerful", "Content"],
+        "answer": "Sad"
+    },
+    {
+        "question": "Which word means the same as difficult?",
+        "options": ["Easy", "Simple", "Hard", "Straightforward"],
+        "answer": "Hard"
+    }
+]
