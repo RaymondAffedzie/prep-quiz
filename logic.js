@@ -19,7 +19,7 @@ $(document).ready(function() {
     let score = 0;
     let numQuestions = 0;
     let timer;
-    const timeLimit = 50; // 50 seconds for each question
+    let timeLimit; // Adjusted for different quiz types
     const itemsPerPage = 5; // Number of items per page for pagination
     let currentPage = 1;
     let sortedFilteredScores = [];
@@ -35,10 +35,10 @@ $(document).ready(function() {
     // Function to start the timer
     function startTimer() {
         let timeRemaining = timeLimit;
-        $('#timer').text(`Time remaining: ${timeRemaining}s`);
+        $('#timer').text(`Time remaining: ${Math.floor(timeRemaining / 60)}m ${timeRemaining % 60}s`);
         timer = setInterval(function() {
             timeRemaining--;
-            $('#timer').text(`Time remaining: ${timeRemaining}s`);
+            $('#timer').text(`Time remaining: ${Math.floor(timeRemaining / 60)}m ${timeRemaining % 60}s`);
             if (timeRemaining <= 0) {
                 clearInterval(timer);
                 handleAnswerSubmission();
@@ -73,13 +73,21 @@ $(document).ready(function() {
         $('#level').empty().append('<option value="">Select Level</option>');
         $('#subject').empty().append('<option value="">Select Subject</option>');
         $('#year-or-form').empty().append('<option value="">Select Year/Form</option>');
+        $('#question-selection').hide(); // Hide question selection by default
         if (currentCategory) {
             // Populate levels based on the main category
-            const levels = currentCategory === "past-questions" ? ["WASSCE", "TVET", "NOVDEC", "BECE"] : ["WASSCE", "TVET", "BECE"];
+            const levels = currentCategory === "past-questions" ? ["WASSCE", "TVET", "NOVDEC", "BECE"] : ["SHS", "TVET", "BECE"];
             for (const level of levels) {
                 $('#level').append(`<option value="${level}">${level}</option>`);
             }
             $('#level').prop('disabled', false);
+
+            // Show or hide the number of questions input based on the main category
+            if (currentCategory === "personal-practice-questions") {
+                $('#question-selection').hide(); // Hide initially for personal practice questions
+            } else {
+                $('#question-selection').hide(); // Always hide for past questions until year/form is selected
+            }
         } else {
             $('#level').prop('disabled', true);
             $('#subject').prop('disabled', true);
@@ -99,17 +107,17 @@ $(document).ready(function() {
                 if (currentLevel === "WASSCE") {
                     subjects = ["english-language", "core-mathematics"];
                 } else if (currentLevel === "TVET") {
-                    subjects = ["core-mathematics", "SocialStudies"];
+                    subjects = ["core-mathematics", "social-studies"];
                 } else if (currentLevel === "NOVDEC") {
-                    subjects = ["Geography", "Biology"];
+                    subjects = ["geography", "biology"];
                 } else if (currentLevel === "BECE") {
-                    subjects = ["RME", "GhanaianLanguage"];
+                    subjects = ["RME", "ghanaian-language"];
                 }
             } else if (currentCategory === "personal-practice-questions") {
                 if (currentLevel === "SHS") {
-                    subjects = ["core-mathematics", "Economics"];
+                    subjects = ["core-mathematics", "economics"];
                 } else if (currentLevel === "TVET") {
-                    subjects = ["Programming", "Database"];
+                    subjects = ["programming", "database"];
                 } else if (currentLevel === "BECE") {
                     subjects = ["BDT", "ICT"];
                 }
@@ -150,28 +158,55 @@ $(document).ready(function() {
                 currentQuestions = data.slice();
                 shuffle(currentQuestions);
                 console.log(`Loaded questions from ${filePath}:`, currentQuestions);
-                $('#question-selection').show();
+
+                // Automatically set number of questions for past questions
+                if (currentCategory === "past-questions") {
+                    numQuestions = currentQuestions.length;
+                    startQuiz(); // Start quiz automatically for past questions
+                } else {
+                    $('#question-selection').show(); // Show question selection for personal practice questions
+                }
             }).fail(function() {
                 console.error(`Failed to load questions from ${filePath}`);
             });
         }
     });
 
-    // Handle quiz start
+    // Handle quiz start for personal practice questions
     $('#start-quiz').click(function() {
-        numQuestions = parseInt($('#num-questions').val());
-        if (numQuestions > currentQuestions.length) {
-            console.warn(`Requested number of questions (${numQuestions}) exceeds available questions (${currentQuestions.length}).`);
-            numQuestions = currentQuestions.length; // Adjust to available questions
+        if (currentCategory === "personal-practice-questions") {
+            numQuestions = parseInt($('#num-questions').val());
+            if (numQuestions > currentQuestions.length) {
+                console.warn(`Requested number of questions (${numQuestions}) exceeds available questions (${currentQuestions.length}).`);
+                numQuestions = currentQuestions.length; // Adjust to available questions
+            }
+            startQuiz(); // Start quiz for personal practice questions
         }
+    });
+
+    // Function to start the quiz
+    function startQuiz() {
         currentQuestions = currentQuestions.slice(0, numQuestions); // Select only the requested number of questions
         currentQuestionIndex = 0;
         score = 0;
+        
+        // Set time limit based on quiz type
+        if (currentCategory === "past-questions") {
+            if (currentLevel === "BECE") {
+                timeLimit = 2700; // 45 minutes
+            } else {
+                timeLimit = 3600; // 60 minutes for WASSCE, TVET, and NOVDEC
+            }
+        } else {
+            timeLimit = 55; // 55 seconds per question for personal-practice-questions
+        }
+
         console.log(`Starting quiz with ${numQuestions} questions.`, currentQuestions);
-        $('#question-selection').hide();
+        $('#department-selection').hide();  // hide the department selection fields
+        $('#question-selection').hide();    // hide the question selection fields
         $('#quiz-container').show();
         displayQuestion();
-    });
+    }
 
     // Display current question
     function displayQuestion() {
@@ -214,6 +249,7 @@ $(document).ready(function() {
         const selectedOption = $('input[name="option"]:checked').val();
         const correctAnswer = currentQuestions[currentQuestionIndex].answer;
 
+        // Feedback display after answering each question ... will be disabled later
         if (selectedOption === correctAnswer) {
             score++;
             $('#feedback').text('Correct!').css('color', 'green');
@@ -232,9 +268,9 @@ $(document).ready(function() {
         stopTimer(); // Stop the timer
         currentQuestionIndex++;
         if (currentQuestionIndex < numQuestions) {
-            setTimeout(displayQuestion, 2000); // Move to the next question after 2 seconds
+            setTimeout(displayQuestion, 1300); // Move to the next question after 2 seconds
         } else {
-            setTimeout(displayScore, 2000); // Show score after the last question
+            setTimeout(displayScore, 1500); // Show score after the last question
         }
     }
 
@@ -366,9 +402,9 @@ $(document).ready(function() {
     async function hashPassword(password) {
         if (window.crypto && window.crypto.subtle && window.crypto.subtle.digest) {
             const msgUint8 = new TextEncoder().encode(password);                           // encode as (utf-8) Uint8Array
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);            // hash the message
-            const hashArray = Array.from(new Uint8Array(hashBuffer));                      // convert buffer to byte array
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');  // convert bytes to hex string
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);             // hash the message
+            const hashArray = Array.from(new Uint8Array(hashBuffer));                       // convert buffer to byte array
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');   // convert bytes to hex string
             return hashHex;
         } else {
             // Fallback to crypto-js for environments that do not support crypto.subtle
@@ -481,7 +517,6 @@ $(document).ready(function() {
 
     // Show login on recovery page
     $('#show-login-on-recover').click(function() {
-        console.log('clicked!');
         $('#recover-form').hide();
         $('#login-form').show();
     });
@@ -538,6 +573,5 @@ $(document).ready(function() {
         console.log('User logged out');
     });
 });
-
-
-// https://ipv4.cloudns.net/api/dynamicURL/?q=NzQ3NjQ4Nzo0OTk2NDIwNjc6YjI5NWQzNTFkNzYwNzc4ZmEwMGUyYTUzN2M3MDY1NWE0YzM1MzhhNzkyMTAxYWYyYjc4MWI2ZDYwYzM4OTUyMA
+// TIP::    Work on the directory for PERSONAL PRACTICE QUESTIONS/LEVEL/NO SUBJECT/form-1/2/3
+// TIP::    Implement an efficient validation for login/registration/password recovery fields
